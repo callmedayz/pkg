@@ -21,3 +21,17 @@ examples/express/node_modules
 .vscode/
 yarn-error.log
 tsconfig.tsbuildinfo
+
+# Augment Code internal files (not for public repository)
+.augment/
+Augment-Memories.md
+
+# PKG revival development files
+.pkg-temp/
+test-app
+test-app.exe
+
+# Development and testing
+*.log
+.env
+.env.local
