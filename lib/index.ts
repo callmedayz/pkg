@@ -27,6 +27,8 @@ import walk, { Marker, WalkerParams } from './walker';
 import { Target, NodeTarget, SymLinks } from './types';
 import { CompressType } from './compress_type';
 import { patchMachOExecutable, signMachOExecutable } from './mach-o';
+import { HybridBuilder } from './hybrid-builder';
+import { getNodeVersionInfo, getBuildStrategy, getCurrentNodeInfo } from './node-support';
 
 const { version } = JSON.parse(
   readFileSync(path.join(__dirname, '../package.json'), 'utf-8')
@@ -233,6 +235,11 @@ export async function exec(argv2: string[]) {
       'v',
       'version',
       'signature',
+      'sea',
+      'traditional',
+      'hybrid',
+      'use-snapshot',
+      'use-code-cache',
     ],
     string: [
       '_',
@@ -251,8 +258,14 @@ export async function exec(argv2: string[]) {
       'targets',
       'C',
       'compress',
+      'build-mode',
     ],
-    default: { bytecode: true, 'native-build': true, signature: true },
+    default: {
+      bytecode: true,
+      'native-build': true,
+      signature: true,
+      'use-code-cache': true,
+    },
   });
 
   if (argv.h || argv.help) {
@@ -269,6 +282,22 @@ export async function exec(argv2: string[]) {
   }
 
   log.info(`pkg@${version}`);
+
+  // build mode detection
+  let buildMode: 'sea' | 'traditional' | 'auto' = 'auto';
+  if (argv.sea) {
+    buildMode = 'sea';
+    log.info('🚀 SEA mode enabled - using Node.js Single Executable Applications');
+  } else if (argv.traditional) {
+    buildMode = 'traditional';
+    log.info('🔧 Traditional mode enabled - using classic PKG');
+  } else if (argv.hybrid) {
+    buildMode = 'auto';
+    log.info('🔄 Hybrid mode enabled - auto-selecting best method');
+  } else if (argv['build-mode']) {
+    buildMode = argv['build-mode'] as 'sea' | 'traditional' | 'auto';
+    log.info(`🎯 Build mode: ${buildMode}`);
+  }
 
   // debug
 

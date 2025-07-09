@@ -22,6 +22,11 @@ export default function help() {
     --no-native-build    skip native addons build
     --no-dict            comma-separated list of packages names to ignore dictionaries. Use --no-dict * to disable all dictionaries
     -C, --compress       [default=None] compression algorithm = Brotli or GZip
+    --sea                force Node.js SEA mode (faster, smaller, Node.js 21+ only)
+    --traditional        force traditional PKG mode (full compatibility)
+    --hybrid             auto-select best build method (default)
+    --use-snapshot       enable SEA startup snapshot (Node.js 20+ only)
+    --use-code-cache     enable SEA V8 code cache (default: true)
 
   ${chalk.dim('Examples:')}
 
@@ -47,5 +52,11 @@ export default function help() {
     '–'
   )} reduce size of the data packed inside the executable with GZip
     ${chalk.cyan('$ pkg --compress GZip index.js')}
+  ${chalk.gray('–')} Use Node.js SEA for faster builds (Node.js 21+ only)
+    ${chalk.cyan('$ pkg --sea -t node21-linux index.js')}
+  ${chalk.gray('–')} Auto-select best build method (hybrid mode)
+    ${chalk.cyan('$ pkg --hybrid -t node20,node18 index.js')}
+  ${chalk.gray('–')} Force traditional PKG for full compatibility
+    ${chalk.cyan('$ pkg --traditional index.js')}
 `);
 }
