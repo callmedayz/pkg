@@ -231,12 +231,11 @@ function stepDetect(
 ) {
   let { body = '' } = record;
 
-  if (body instanceof Buffer) {
-    body = body.toString();
-  }
+  // Ensure body is always a string for detector
+  const bodyString: string = body instanceof Buffer ? body.toString() : (body as string);
 
   try {
-    detector.detect(body, (node, trying) => {
+    detector.detect(bodyString, (node, trying) => {
       const { toplevel } = marker;
       let d = detector.visitorSuccessful(node) as unknown as Derivative;
 
