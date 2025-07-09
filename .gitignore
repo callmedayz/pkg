@@ -24,6 +24,7 @@ tsconfig.tsbuildinfo
 
 # Augment Code internal files (not for public repository)
 .augment/
+.augment/rules/
 Augment-Memories.md
 
 # PKG revival development files
@@ -35,3 +36,7 @@ test-app.exe
 *.log
 .env
 .env.local
+
+# Documentation and planning files
+MODERNIZATION_ROADMAP.md
+SEA_INTEGRATION_PLAN.md
