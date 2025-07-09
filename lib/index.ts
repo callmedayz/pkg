@@ -13,6 +13,7 @@ import {
 } from 'fs-extra';
 import minimist from 'minimist';
 import { need, system } from 'pkg-fetch';
+import { enhancedFetch, enhancedSystem, enhancedNeed } from './pkg-fetch-extended';
 import path from 'path';
 
 import { log, wasReported } from './log';
@@ -43,12 +44,14 @@ function isConfiguration(file: string) {
 const {
   hostArch,
   hostPlatform,
-  isValidNodeRange,
   knownArchs,
   knownPlatforms,
   toFancyArch,
   toFancyPlatform,
 } = system;
+
+// Use enhanced version for Node.js range validation
+const { isValidNodeRange } = enhancedSystem;
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const hostNodeRange = `node${process.version.match(/^v(\d+)/)![1]}`;
 
@@ -185,7 +188,7 @@ async function needWithDryRun({
   platform,
   arch,
 }: NodeTarget) {
-  const result = await need({
+  const result = await enhancedNeed({
     dryRun: true,
     forceBuild,
     nodeRange,
@@ -208,7 +211,7 @@ async function needViaCache(target: NodeTarget) {
 
   const { forceBuild, nodeRange, platform, arch } = target;
 
-  c = await need({
+  c = await enhancedNeed({
     forceBuild,
     nodeRange,
     platform,
